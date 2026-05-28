@@ -9,8 +9,8 @@ from pathlib import Path
 import requests
 
 # config 
-# BASE_URL = "https://s3-us-west-1.amazonaws.com/umbrella-static"
-BASE_URL = "https://localhost/umbrella-static"
+BASE_URL = "https://s3-us-west-1.amazonaws.com/umbrella-static"
+#BASE_URL = "https://localhost/umbrella-static"
 CURRENT_URL = f"{BASE_URL}/top-1m.csv.zip"
 DATED_URL = f"{BASE_URL}/top-1m-{{date}}.csv.zip"
 
@@ -35,7 +35,6 @@ def download(date_str: str | None = None) -> list[tuple]:
         print("The request timed out.")
         exit(1)
     except requests.exceptions.RequestException as e:
-        # Catches any other issue (like bad URLs or SSL errors)
         print(f"An error occurred: {e}")
         exit(1)
         # return
@@ -62,14 +61,14 @@ def download(date_str: str | None = None) -> list[tuple]:
     return fqdns
  
  
-# ── Filter ────────────────────────────────────────────────────────────────────
+# ── Filter 
  
 def filter_by_target(fqdns: list[str], target: str) -> list[str]:
     target = target.lower().strip()
     return [f for f in fqdns if f == target or f.endswith("." + target)]
  
  
-# ── Save ──────────────────────────────────────────────────────────────────────
+# ── Save 
  
 def save(path: Path, lines: list[str]):
     unique = sorted(set(lines))
@@ -77,7 +76,6 @@ def save(path: Path, lines: list[str]):
     print(f"[+] Saved {len(unique):,} entries → {path}")
  
  
-# ── CLI ───────────────────────────────────────────────────────────────────────
  
 def main():
     parser = argparse.ArgumentParser(
